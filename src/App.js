@@ -4,7 +4,6 @@ import './styles/App.css';
 import MyNFT from './utils/mynft.json';
 import twitterLogo from './assets/twitter-logo.svg';
 
-// Constants
 const TWITTER_HANDLE = 'abhayratti';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 // const OPENSEA_LINK = '';
@@ -14,7 +13,7 @@ const CONTRACT_ADDRESS = "0x10f026F9f8C1482d3bE51349C61a8D21aC5E5A19";
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
 
-  const checkIfWalletConnected = () => {
+  const checkIfWalletConnected = async () => {
     const { ethereum } = window;
 
     if (!ethereum) {
@@ -24,12 +23,12 @@ const App = () => {
       console.log("Ethereum object ✅", ethereum);
     }
 
-    const accounts = ethereum.request({ method: 'eth_accounts' });
+    const accounts = await ethereum.request({ method: 'eth_accounts' });
 
     if (accounts.length !== 0) {
       const account = accounts[0];
       console.log("Found an authorized account:", account);
-      setCurrentAccount(account);
+      setCurrentAccount(account)
       setupEventListener()
     } else {
       console.log("No account found");
@@ -50,7 +49,6 @@ const App = () => {
 
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
-
       setupEventListener() 
     } catch (error) {
       console.log(error)
@@ -113,7 +111,7 @@ const App = () => {
 
   // render methods
   const renderNotConnectedContainer = () => (
-    <button onClick={connectWallet} className="cta-button mint-button">
+    <button className="cta-button mint-button" onClick={connectWallet}>
       Connect to Wallet
     </button>
   );
@@ -122,7 +120,7 @@ const App = () => {
     <button onClick={askContractToMintNFT} className="cta-button mint-button">
       Mint NFT!
     </button>
-  )
+  );
 
   return (
     <div className="App">
