@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import './styles/App.css';
-import MyNFT from './utils/mynft.json'
+import MyNFT from './utils/mynft.json';
 import twitterLogo from './assets/twitter-logo.svg';
 
 // Constants
 const TWITTER_HANDLE = 'abhayratti';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
-const OPENSEA_LINK = '';
-const TOTAL_MINT_COUNT = 50;
+// const OPENSEA_LINK = '';
+// const TOTAL_MINT_COUNT = 50;
+const CONTRACT_ADDRESS = "0x10f026F9f8C1482d3bE51349C61a8D21aC5E5A19";
 
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
@@ -29,6 +30,7 @@ const App = () => {
       const account = accounts[0];
       console.log("Found an authorized account:", account);
       setCurrentAccount(account);
+      setupEventListener()
     } else {
       console.log("No account found");
     }
@@ -38,26 +40,49 @@ const App = () => {
   const connectWallet = async () => {
     try {
       const { ethereum } = window;
-      if (!ethereum) {
-        alert("You need MetaMask!!!!");
-        return;
-      }  
 
-      // request access to account
+      if (!ethereum) {
+        alert("Get MetaMask!");
+        return;
+      }
+
       const accounts = await ethereum.request({ method: "eth_requestAccounts" });
 
-      // print public address
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
+
+      setupEventListener() 
     } catch (error) {
-      console.log(error);
+      console.log(error)
+    }
+  }
+
+  const setupEventListener = async () => {
+    try {
+      const { ethereum } = window;
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const connectedContract = new ethers.Contract(CONTRACT_ADDRESS, MyNFT.abi, signer);
+
+        connectedContract.on("NewNFTMinted", (from, tokenId) => {
+          console.log(from, tokenId.toNumber())
+          alert("Check your OpenSea Wallet for your NFT! Here's the link: https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${tokenId.toNumber()}")
+        });
+
+        console.log("Setup even listener")
+      } else {
+        console.log("ethereum object doesn't exist!");
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
   
   // smart contract
   const askContractToMintNFT = async () => {
-    const CONTRACT_ADDRESS = "0x3ea2017fa2a0cC28d05934a7cAB80a07D8994356";
-
+    
     try {
       const { ethereum } = window;
 
@@ -72,7 +97,7 @@ const App = () => {
         console.log("Mining...")
         await nftTxn.wait();
 
-        console.log("Success! See transaction:  https://rinkeby.etherscan.io/tx/${nftTxn.hash}");
+        console.log("Success! See transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}");
 
       } else {
         console.log("Ethereum object don't exist!");
@@ -82,32 +107,32 @@ const App = () => {
     }
   }
 
-  // Render Methods
+  useEffect(() => {
+    checkIfWalletConnected();
+  }, [])
+
+  // render methods
   const renderNotConnectedContainer = () => (
-    <button onClick={connectWallet} className="cta-button connect-wallet-button">
+    <button onClick={connectWallet} className="cta-button mint-button">
       Connect to Wallet
     </button>
   );
 
-  useEffect(() => {
-    checkIfWalletConnected();
-  }, [])
+  const renderMintUI = () => (
+    <button onClick={askContractToMintNFT} className="cta-button mint-button">
+      Mint NFT!
+    </button>
+  )
 
   return (
     <div className="App">
       <div className="container">
         <div className="header-container">
-          <p className="header gradient-text">My NFT Collection</p>
+          <p className="header gradient-text">Your Fortune</p>
           <p className="sub-text">
-            Each unique. Each beautiful. Discover your NFT today.
+            Wanna know your fortune? Mint an NFT and find out what the future has in store for you...
           </p>
-          {currentAccount === "" ? (
-            renderNotConnectedContainer()
-          ) : (
-            <button onClick={askContractToMintNFT} className="cta-button connect-wallet-button">
-              Mint NFT
-            </button>
-          )}
+          {currentAccount === "" ? renderNotConnectedContainer() : renderMintUI()}
         </div>
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
@@ -116,7 +141,7 @@ const App = () => {
             href={TWITTER_LINK}
             target="_blank"
             rel="noreferrer"
-          >{`built on @${TWITTER_HANDLE}`}</a>
+          >{`built by @${TWITTER_HANDLE}`}</a>
         </div>
       </div>
     </div>
