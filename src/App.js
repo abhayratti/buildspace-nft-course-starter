@@ -6,7 +6,7 @@ import twitterLogo from './assets/twitter-logo.svg';
 
 const TWITTER_HANDLE = 'abhayratti';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
-// const OPENSEA_LINK = '';
+const OPENSEA_LINK = 'https://testnets.opensea.io/collection/your-true-fortune-v3';
 // const TOTAL_MINT_COUNT = 50;
 const CONTRACT_ADDRESS = "0x10f026F9f8C1482d3bE51349C61a8D21aC5E5A19";
 
@@ -28,8 +28,8 @@ const App = () => {
     if (accounts.length !== 0) {
       const account = accounts[0];
       console.log("Found an authorized account:", account);
-      setCurrentAccount(account)
-      setupEventListener()
+      setCurrentAccount(account);
+      setupEventListener();
     } else {
       console.log("No account found");
     }
@@ -49,7 +49,7 @@ const App = () => {
 
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
-      setupEventListener() 
+      setupEventListener(); 
     } catch (error) {
       console.log(error)
     }
@@ -65,11 +65,11 @@ const App = () => {
         const connectedContract = new ethers.Contract(CONTRACT_ADDRESS, MyNFT.abi, signer);
 
         connectedContract.on("NewNFTMinted", (from, tokenId) => {
-          console.log(from, tokenId.toNumber())
-          alert("Check your OpenSea Wallet for your NFT! Here's the link: https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${tokenId.toNumber()}")
+          console.log(from, tokenId.toNumber());
+          alert("We've minted your NFT and sent it to your wallet. Here's the link: https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${tokenId.toNumber()}");
         });
 
-        console.log("Setup even listener")
+        console.log("Setup event listener")
       } else {
         console.log("ethereum object doesn't exist!");
       }
@@ -85,7 +85,7 @@ const App = () => {
       const { ethereum } = window;
 
       if (ethereum) {
-        const provider = new ethers.provder.Web3Provider(ethereum);
+        const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const connectedContract = new ethers.Contract(CONTRACT_ADDRESS, MyNFT.abi, signer);
         
@@ -131,6 +131,16 @@ const App = () => {
             Wanna know your fortune? Mint an NFT and find out what the future has in store for you...
           </p>
           {currentAccount === "" ? renderNotConnectedContainer() : renderMintUI()}
+        </div>
+        <div>
+        <button className="cta-button connect-wallet-button">
+        <a
+            className="footer-text"
+            href={OPENSEA_LINK}
+            target="_blank"
+            rel="noreferrer"
+          >{`View NFT Collection`}</a>
+        </button>
         </div>
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
