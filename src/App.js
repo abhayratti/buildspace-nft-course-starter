@@ -7,7 +7,6 @@ import twitterLogo from './assets/twitter-logo.svg';
 const TWITTER_HANDLE = 'abhayratti';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 const OPENSEA_LINK = 'https://testnets.opensea.io/collection/your-true-fortune-v3';
-// const TOTAL_MINT_COUNT = 50;
 const CONTRACT_ADDRESS = "0x10f026F9f8C1482d3bE51349C61a8D21aC5E5A19";
 
 const App = () => {
@@ -66,7 +65,7 @@ const App = () => {
 
         connectedContract.on("NewNFTMinted", (from, tokenId) => {
           console.log(from, tokenId.toNumber());
-          alert("We've minted your NFT and sent it to your wallet. Here's the link: https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${tokenId.toNumber()}");
+          alert(`We have minted your NFT and sent it to your wallet. Here is the link: https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`);
         });
 
         console.log("Setup event listener")
