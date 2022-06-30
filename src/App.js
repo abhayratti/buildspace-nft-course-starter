@@ -134,7 +134,7 @@ const App = () => {
         <div>
         <button className="cta-button connect-wallet-button">
         <a
-            className="footer-text"
+            className="cta-button"
             href={OPENSEA_LINK}
             target="_blank"
             rel="noreferrer"
