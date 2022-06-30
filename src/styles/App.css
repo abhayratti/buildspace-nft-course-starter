@@ -25,6 +25,13 @@
   padding-top: 2rem;
 }
 
+.header-top {
+  font-size: medium;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 90%;
+}
+
 .sub-text {
   font-size: 25px;
   color: black;

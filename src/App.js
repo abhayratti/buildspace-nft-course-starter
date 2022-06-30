@@ -92,6 +92,13 @@ const App = () => {
         let nftTxn = await connectedContract.mintNFT();
 
         console.log("Mining...")
+        const renderMiningText = () => (
+          <header className="header-top">
+            One moment...
+          </header>
+        );
+        renderMiningText();
+
         await nftTxn.wait();
 
         console.log("Success! See transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}");
