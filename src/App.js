@@ -139,7 +139,7 @@ const App = () => {
             href={OPENSEA_LINK}
             target="_blank"
             rel="noreferrer"
-          >{`View NFT Collection`}</a>
+          >{`View "Your Fortune" NFT Collection`}</a>
         </button>
         </div>
         <div className="footer-container">
