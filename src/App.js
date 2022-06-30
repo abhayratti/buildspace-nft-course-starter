@@ -95,7 +95,7 @@ const App = () => {
         await nftTxn.wait();
 
         console.log("Success! See transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}");
-        alert(`We have minted your NFT and sent it to your wallet. Check it out on your OpenSea account here: https://testnets.opensea.io/assets/account`);
+        alert(`We have minted your NFT and sent it to your wallet. Check it out on your OpenSea account here: https://testnets.opensea.io/account`);
 
       } else {
         console.log("Ethereum object don't exist!");
